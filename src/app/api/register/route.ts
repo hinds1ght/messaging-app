@@ -2,13 +2,26 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 
+import { registerSchema } from '@/lib/validator';
+import {
+  sanitizeDisplayName,
+  sanitizeEmail,
+  sanitizePassword,
+} from '@/lib/sanitize';
+
+import { ZodError } from 'zod';
+
 export async function POST(req: Request) {
   try {
-    const { displayName, email, password } = await req.json();
+    const body = await req.json();
 
-    if (!displayName || !email || !password) {
-      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
-    }
+    // Validator
+    const parsed = registerSchema.parse(body);
+
+    // sanitizer
+    const displayName = sanitizeDisplayName(parsed.displayName);
+    const email = sanitizeEmail(parsed.email);
+    const password = sanitizePassword(parsed.password);
 
     const existingUser = await prisma.user.findFirst({
       where: {
@@ -20,7 +33,10 @@ export async function POST(req: Request) {
     });
 
     if (existingUser) {
-      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'User already exists' },
+        { status: 400 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,13 +49,30 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({
-      message: 'User registered',
-      user: { id: newUser.id, name: newUser.displayName, email: newUser.email },
-    }, { status: 201 });
-
+    return NextResponse.json(
+      {
+        message: 'User registered',
+        user: {
+          id: newUser.id,
+          name: newUser.displayName,
+          email: newUser.email,
+        },
+      },
+      { status: 201 }
+    );
   } catch (error) {
+    
+    if (error instanceof ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0]?.message || 'Invalid input' },
+        { status: 400 }
+      );
+    }
+
     console.error('Register Error:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
