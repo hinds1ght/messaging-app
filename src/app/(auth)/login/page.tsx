@@ -27,7 +27,7 @@ export default function LoginPage() {
 
     if (res.ok) {
       setAccessToken(data.accessToken); 
-      router.push('/api/profile'); 
+      router.push('/chat'); 
     } else {
       setMessage(data.message || 'Login failed');
     }
