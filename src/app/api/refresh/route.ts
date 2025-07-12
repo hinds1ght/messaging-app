@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const decoded = verifyRefreshToken(refreshToken) as { userId: number };
-    const accessToken = signAccessToken(String(decoded.userId));
+    const accessToken = signAccessToken(decoded.userId);
 
     return NextResponse.json({ accessToken });
   } catch (err) {
