@@ -17,7 +17,6 @@ interface Message {
 export default function ConversationPage() {
   const { accessToken, user } = useAuth();
   const rawParams = useParams();
-  console.log('🧪 rawParams from useParams:', rawParams);
   const conversationId = Array.isArray(rawParams?.conversationId)
     ? rawParams.conversationId[0]
     : rawParams?.conversationId;
@@ -26,42 +25,31 @@ export default function ConversationPage() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Fetch messages
   useEffect(() => {
     const fetchMessages = async () => {
-      console.log('Auth loading:', loading);
-      console.log('accessToken:', accessToken);
-      console.log('conversationId:', conversationId);
-  
       if (!accessToken || !conversationId) return;
-  
+
       try {
-        console.log('📩 Fetching messages for conversation:', conversationId);
-  
         const res = await fetch(`/api/messages/${conversationId}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-  
+
         if (res.ok) {
           const data = await res.json();
-          console.log('✅ Messages:', data);
           setMessages(data);
-        } else {
-          console.error('❌ Failed to fetch messages', res.status);
         }
       } catch (err) {
-        console.error('❌ Error fetching messages:', err);
+        console.error('Error fetching messages:', err);
       } finally {
-        setLoading(false); // ✅ Always stop loading
+        setLoading(false);
       }
     };
-  
+
     fetchMessages();
   }, [accessToken, conversationId]);
-  
-  // Handle send
+
   const sendMessage = async () => {
     if (!input.trim() || !conversationId) return;
 
