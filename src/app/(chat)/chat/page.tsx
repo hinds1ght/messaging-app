@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../(auth)/AuthContext';
 import { useRouter } from 'next/navigation';
+import Sidebar from './Sidebar';
 
-export default function LandingPage() {
+export default function ChatLandingPage() {
   const { accessToken, user, loading, setAccessToken } = useAuth();
   const [displayName, setDisplayName] = useState<string | null>(null);
   const router = useRouter();
@@ -48,16 +49,20 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-6">
-      <h1 className="text-3xl font-bold">
-        Hello, {displayName ?? 'User'}
-      </h1>
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600"
-      >
-        Logout
-      </button>
+    <div className="flex h-screen">
+      <Sidebar />
+
+      <div className="flex-1 flex flex-col items-center justify-center space-y-6">
+        <h1 className="text-3xl font-bold">
+          Hello, {displayName ?? 'User'}
+        </h1>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 }
