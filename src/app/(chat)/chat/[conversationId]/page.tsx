@@ -9,6 +9,7 @@ interface Message {
   content: string;
   senderId: number;
   sender: {
+    id: number;
     displayName: string;
   };
   createdAt: string;
@@ -16,32 +17,29 @@ interface Message {
 
 export default function ConversationPage() {
   const { accessToken, user } = useAuth();
-  const rawParams = useParams();
-  const conversationId = Array.isArray(rawParams?.conversationId)
-    ? rawParams.conversationId[0]
-    : rawParams?.conversationId;
+  const { conversationId: rawId } = useParams() as { conversationId?: string };
+  const conversationId = Array.isArray(rawId) ? rawId[0] : rawId;
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMessages = async () => {
-      if (!accessToken || !conversationId) return;
+    if (!accessToken || !conversationId) return;
 
+    const fetchMessages = async () => {
+      setLoading(true);
       try {
         const res = await fetch(`/api/messages/${conversationId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
 
         if (res.ok) {
-          const data = await res.json();
+          const data: Message[] = await res.json();
           setMessages(data);
         }
       } catch (err) {
-        console.error('Error fetching messages:', err);
+        console.error('Failed to fetch messages:', err);
       } finally {
         setLoading(false);
       }
@@ -63,7 +61,7 @@ export default function ConversationPage() {
     });
 
     if (res.ok) {
-      const newMessage = await res.json();
+      const newMessage: Message = await res.json();
       setMessages((prev) => [...prev, newMessage]);
       setInput('');
     }
@@ -73,6 +71,7 @@ export default function ConversationPage() {
 
   return (
     <div className="flex flex-col h-screen p-4 space-y-4">
+      {/* Messages */}
       <div className="flex-1 overflow-y-auto space-y-3">
         {messages.map((msg) => (
           <div
@@ -92,6 +91,7 @@ export default function ConversationPage() {
         ))}
       </div>
 
+      {/* Chat input */}
       <div className="flex space-x-2">
         <input
           type="text"
