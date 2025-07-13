@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/(auth)/AuthContext';
+import Link from 'next/link';
 
 export default function ConversationList({ refreshFlag }: { refreshFlag: number }) {
   const { accessToken, user } = useAuth();
@@ -31,12 +32,14 @@ export default function ConversationList({ refreshFlag }: { refreshFlag: number 
           .join(', ');
 
         return (
-          <div key={convo.id} className="p-3 bg-white rounded-xl shadow hover:bg-gray-100">
-            <div className="font-semibold">{convo.name || names}</div>
-            <div className="text-xs text-gray-500">
-              {convo.messages[0]?.content || 'No messages yet'}
+          <Link href={`/chat/${convo.id}`} key={convo.id}>
+            <div className="p-3 bg-white rounded-xl shadow hover:bg-gray-100">
+              <div className="font-semibold">{convo.name || names}</div>
+              <div className="text-xs text-gray-500">
+                {convo.messages[0]?.content || 'No messages yet'}
+              </div>
             </div>
-          </div>
+          </Link>
         );
       })}
     </div>
