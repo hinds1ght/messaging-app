@@ -70,9 +70,9 @@ export default function ConversationPage() {
   if (loading) return <div className="p-4">Loading conversation...</div>;
 
   return (
-    <div className="flex flex-col h-screen p-4 space-y-4">
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-3">
+    <div className="flex flex-col h-full">
+      {/* Messages area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg) => (
           <div
             key={msg.id}
@@ -91,21 +91,23 @@ export default function ConversationPage() {
         ))}
       </div>
 
-      {/* Chat input */}
-      <div className="flex space-x-2">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="flex-1 px-4 py-2 border rounded-xl"
-          placeholder="Type a message..."
-        />
-        <button
-          onClick={sendMessage}
-          className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
-        >
-          Send
-        </button>
+      {/* Input area */}
+      <div className="p-4 bg-white">
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="flex-1 px-4 py-2 border rounded-xl"
+            placeholder="Type a message..."
+          />
+          <button
+            onClick={sendMessage}
+            className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );

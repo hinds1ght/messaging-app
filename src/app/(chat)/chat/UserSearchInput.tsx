@@ -52,7 +52,7 @@ export default function UserSearchInput({ onNewChat }: { onNewChat: () => void }
   };
 
   return (
-    <div className="p-3 border-b">
+    <div className="p-3">
       <input
         type="text"
         placeholder="Search users..."
