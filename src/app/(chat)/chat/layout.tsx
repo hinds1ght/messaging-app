@@ -12,17 +12,14 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const { conversationId } = useParams();
 
   return (
-      <div className="flex flex-col h-screen">
-
+    <div className="flex flex-col h-screen">
       <Header />
       <div className="flex flex-1">
         <Sidebar />
 
         <div className="flex-1 flex flex-col overflow-hidden">
           {conversationId && <ConversationHeader />}
-          <div className="flex-1 overflow-y-auto">
-            {children}
-          </div>
+          <div className="flex-1 overflow-y-auto">{children}</div>
         </div>
         <RecipientPanel />
       </div>

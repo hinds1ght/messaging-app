@@ -62,7 +62,7 @@ export default function ConversationPage() {
 
     if (res.ok) {
       const newMessage: Message = await res.json();
-      setMessages((prev) => [...prev, newMessage]);
+      setMessages(prev => [...prev, newMessage]);
       setInput('');
     }
   };
@@ -73,7 +73,7 @@ export default function ConversationPage() {
     <div className="flex flex-col h-full">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map((msg) => (
+        {messages.map(msg => (
           <div
             key={msg.id}
             className={`max-w-md px-4 py-2 rounded-xl text-sm ${
@@ -99,7 +99,7 @@ export default function ConversationPage() {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="flex-1 px-4 py-2 border rounded-xl"
             placeholder="Type a message..."
           />

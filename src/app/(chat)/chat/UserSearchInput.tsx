@@ -57,13 +57,13 @@ export default function UserSearchInput({ onNewChat }: { onNewChat: () => void }
         type="text"
         placeholder="Search users..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={e => setQuery(e.target.value)}
         className="w-full px-3 py-2 border rounded-xl text-sm"
       />
       {loading && <p className="text-xs text-gray-400 mt-1">Searching...</p>}
       {results.length > 0 && (
         <ul className="mt-2 space-y-1">
-          {results.map((user) => (
+          {results.map(user => (
             <li
               key={user.id}
               onClick={() => handleClick(user.id)}

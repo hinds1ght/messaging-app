@@ -49,7 +49,7 @@ export async function GET(
       },
     });
 
-    const users = otherParticipants.map((p) => p.user);
+    const users = otherParticipants.map(p => p.user);
 
     return NextResponse.json(users);
   } catch (err) {

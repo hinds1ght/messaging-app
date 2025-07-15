@@ -68,13 +68,16 @@ export default function Header() {
               </div>
               <span>{displayName ?? 'User'}</span>
             </div>
-            <button onClick={handleLogout} className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 text-sm">
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 text-sm"
+            >
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link href="/login"className="hover:underline text-sm font-medium">
+            <Link href="/login" className="hover:underline text-sm font-medium">
               Login
             </Link>
 

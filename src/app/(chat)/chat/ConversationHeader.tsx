@@ -30,7 +30,7 @@ export default function ConversationHeader() {
 
         if (res.ok) {
           const participants: User[] = await res.json();
-          const otherUser = participants.find((p) => p.id !== user?.userId);
+          const otherUser = participants.find(p => p.id !== user?.userId);
           setRecipient(otherUser || null);
         }
       } catch (err) {

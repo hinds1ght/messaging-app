@@ -3,11 +3,7 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 
 import { registerSchema } from '@/lib/validator';
-import {
-  sanitizeDisplayName,
-  sanitizeEmail,
-  sanitizePassword,
-} from '@/lib/sanitize';
+import { sanitizeDisplayName, sanitizeEmail, sanitizePassword } from '@/lib/sanitize';
 
 import { ZodError } from 'zod';
 
@@ -25,18 +21,12 @@ export async function POST(req: Request) {
 
     const existingUser = await prisma.user.findFirst({
       where: {
-        OR: [
-          { email },
-          { displayName },
-        ],
+        OR: [{ email }, { displayName }],
       },
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: 'User already exists' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -61,7 +51,6 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    
     if (error instanceof ZodError) {
       return NextResponse.json(
         { error: error.issues[0]?.message || 'Invalid input' },
@@ -70,9 +59,6 @@ export async function POST(req: Request) {
     }
 
     console.error('Register Error:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

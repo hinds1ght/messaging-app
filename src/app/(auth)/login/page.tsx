@@ -26,8 +26,8 @@ export default function LoginPage() {
     const data = await res.json();
 
     if (res.ok) {
-      setAccessToken(data.accessToken); 
-      router.push('/chat'); 
+      setAccessToken(data.accessToken);
+      router.push('/chat');
     } else {
       setMessage(data.message || 'Login failed');
     }
@@ -48,7 +48,7 @@ export default function LoginPage() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -59,7 +59,7 @@ export default function LoginPage() {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -73,10 +73,12 @@ export default function LoginPage() {
           {loading ? 'Logging in...' : 'Login'}
         </button>
 
-      <div className="mt-4 text-center text-sm text-gray-600">
-        Don’t have an account?{' '}
-        <a href="/register" className="text-blue-600 hover:underline">Register here</a>
-      </div>
+        <div className="mt-4 text-center text-sm text-gray-600">
+          Don’t have an account?{' '}
+          <a href="/register" className="text-blue-600 hover:underline">
+            Register here
+          </a>
+        </div>
 
         {message && (
           <p

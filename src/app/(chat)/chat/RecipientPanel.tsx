@@ -32,7 +32,7 @@ export default function RecipientPanel() {
 
         if (res.ok) {
           const data: User[] = await res.json();
-          const otherUser = data.find((u) => u.id !== user?.userId);
+          const otherUser = data.find(u => u.id !== user?.userId);
           setRecipient(otherUser ?? null);
         } else {
           console.error('Failed to fetch participants', res.status);

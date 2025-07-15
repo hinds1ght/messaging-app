@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyAccessToken } from '@/lib/jwt';
 
-export async function GET(req: NextRequest, context: { params: Promise<{ conversationId?: string }> }) {
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ conversationId?: string }> }
+) {
   const token = req.headers.get('authorization')?.split(' ')[1];
   if (!token) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 
@@ -45,7 +48,10 @@ export async function GET(req: NextRequest, context: { params: Promise<{ convers
   }
 }
 
-export async function POST(req: NextRequest, context: { params: Promise<{ conversationId?: string }> }) {
+export async function POST(
+  req: NextRequest,
+  context: { params: Promise<{ conversationId?: string }> }
+) {
   const token = req.headers.get('authorization')?.split(' ')[1];
   if (!token) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 

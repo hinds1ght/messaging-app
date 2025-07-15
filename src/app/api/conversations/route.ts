@@ -76,10 +76,7 @@ export async function POST(req: NextRequest) {
         isGroup: false,
         participants: {
           every: {
-            OR: [
-              { userId },
-              { userId: targetUserId },
-            ],
+            OR: [{ userId }, { userId: targetUserId }],
           },
         },
       },
@@ -96,10 +93,7 @@ export async function POST(req: NextRequest) {
       data: {
         isGroup: false,
         participants: {
-          create: [
-            { userId },
-            { userId: targetUserId },
-          ],
+          create: [{ userId }, { userId: targetUserId }],
         },
       },
       include: {

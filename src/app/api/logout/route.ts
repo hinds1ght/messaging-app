@@ -8,7 +8,7 @@ export async function POST() {
     secure: true,
     sameSite: 'strict',
     path: '/api/refresh',
-    maxAge: 0, 
+    maxAge: 0,
   });
 
   return response;
