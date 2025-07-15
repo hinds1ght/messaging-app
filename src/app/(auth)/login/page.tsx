@@ -73,6 +73,11 @@ export default function LoginPage() {
           {loading ? 'Logging in...' : 'Login'}
         </button>
 
+      <div className="mt-4 text-center text-sm text-gray-600">
+        Don’t have an account?{' '}
+        <a href="/register" className="text-blue-600 hover:underline">Register here</a>
+      </div>
+
         {message && (
           <p
             className={`text-center font-medium ${
