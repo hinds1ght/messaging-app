@@ -46,23 +46,52 @@ export default function Header() {
 
   return (
     <header className="w-full bg-gray-800 text-white px-6 py-3 flex justify-between items-center">
-      <h1 className="text-lg font-bold"><Link href="/">ChimeUwu</Link></h1>
-      {accessToken && (
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-sm font-semibold">
-              {displayName?.[0].toUpperCase() || '?'}
+      <h1 className="text-lg font-bold">
+        <Link href="/">ChimeUwu</Link>
+      </h1>
+
+      <div className="flex items-center space-x-4">
+        {/* Always show Contacts link */}
+        <Link
+          href="/contacts"
+          className="hover:underline text-sm font-medium"
+        >
+          Contacts
+        </Link>
+
+        {accessToken ? (
+          <>
+            {/* Display name and logout */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-sm font-semibold">
+                {displayName?.[0].toUpperCase() || '?'}
+              </div>
+              <span>{displayName ?? 'User'}</span>
             </div>
-            <span>{displayName ?? 'User'}</span>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 text-sm"
-          >
-            Logout
-          </button>
-        </div>
-      )}
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 text-sm"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="hover:underline text-sm font-medium"
+            >
+              Login
+            </Link>
+            <Link
+              href="/register"
+              className="hover:underline text-sm font-medium"
+            >
+              Register
+            </Link>
+          </>
+        )}
+      </div>
     </header>
   );
 }
