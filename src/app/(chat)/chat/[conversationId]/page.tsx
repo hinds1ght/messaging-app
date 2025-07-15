@@ -82,7 +82,9 @@ export default function ConversationPage() {
                 : 'bg-gray-200 text-gray-800'
             }`}
           >
-            <div className="font-semibold">{msg.sender.displayName}</div>
+            <div className="font-semibold">
+              {msg.senderId === user?.userId ? 'You' : msg.sender.displayName}
+            </div>
             <div>{msg.content}</div>
             <div className="text-xs text-right opacity-70">
               {new Date(msg.createdAt).toLocaleTimeString()}
