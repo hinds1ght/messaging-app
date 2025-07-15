@@ -11,7 +11,7 @@ export default function Sidebar() {
 
   return (
     <div className="w-80 border-r h-full flex flex-col">
-      <div className="p-4 font-bold text-xl">Messages</div>
+      <div className="p-4 font-bold text-xl">Chat</div>
 
       <UserSearchInput onNewChat={triggerRefresh} />
       <ConversationList refreshFlag={refreshFlag} />
