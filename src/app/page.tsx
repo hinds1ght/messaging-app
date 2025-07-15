@@ -37,7 +37,7 @@ export default function HomePage() {
     <LayoutWrapper>
     <main className="flex flex-col items-center justify-center text-center px-6 py-20 space-y-8">
       <h1 className="text-4xl font-bold">
-        Welcome to My Chat App 👋
+        Welcome to ChimeUwu 👋
       </h1>
 
       <p className="max-w-xl text-gray-700 text-lg">

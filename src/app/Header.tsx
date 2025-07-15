@@ -46,7 +46,7 @@ export default function Header() {
 
   return (
     <header className="w-full bg-gray-800 text-white px-6 py-3 flex justify-between items-center">
-      <h1 className="text-lg font-bold"><Link href="/">My Chat App</Link></h1>
+      <h1 className="text-lg font-bold"><Link href="/">ChimeUwu</Link></h1>
       {accessToken && (
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
