@@ -49,20 +49,14 @@ export default function HomePage() {
       ) : user ? (
         <>
           <p className="text-lg">Welcome back{displayName ? `, ${displayName}` : ''}!</p>
-          <button
-            onClick={handleStart}
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
-          >
+          <button onClick={handleStart} className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition">
             Go to Chat
           </button>
         </>
       ) : (
         <>
           <p className="text-lg">Get started by registering or logging in.</p>
-          <button
-            onClick={handleStart}
-            className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition"
-          >
+          <button onClick={handleStart} className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition">
             Register / Login
           </button>
         </>

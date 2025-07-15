@@ -52,10 +52,7 @@ export default function ChatLandingPage() {
       <h1 className="text-3xl font-bold">
         Hello, {displayName ?? 'User'}
       </h1>
-      <button
-        onClick={handleLogout}
-        className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600"
-      >
+      <button onClick={handleLogout} className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600">
         Logout
       </button>
     </div>

@@ -51,42 +51,34 @@ export default function Header() {
       </h1>
 
       <div className="flex items-center space-x-4">
-        {/* Always show Contacts link */}
-        <Link
-          href="/contacts"
-          className="hover:underline text-sm font-medium"
-        >
+        <Link href="/about" className="hover:underline text-sm font-medium">
+          About
+        </Link>
+        <Link href="/contacts" className="hover:underline text-sm font-medium">
           Contacts
         </Link>
 
+        <span className="text-white opacity-50">|</span>
+
         {accessToken ? (
           <>
-            {/* Display name and logout */}
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-sm font-semibold">
                 {displayName?.[0].toUpperCase() || '?'}
               </div>
               <span>{displayName ?? 'User'}</span>
             </div>
-            <button
-              onClick={handleLogout}
-              className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 text-sm"
-            >
+            <button onClick={handleLogout} className="px-3 py-1 bg-red-600 rounded hover:bg-red-700 text-sm">
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link
-              href="/login"
-              className="hover:underline text-sm font-medium"
-            >
+            <Link href="/login"className="hover:underline text-sm font-medium">
               Login
             </Link>
-            <Link
-              href="/register"
-              className="hover:underline text-sm font-medium"
-            >
+
+            <Link href="/register" className="hover:underline text-sm font-medium">
               Register
             </Link>
           </>
