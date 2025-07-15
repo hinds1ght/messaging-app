@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/(auth)/AuthContext';
 
 export default function RegisterPage() {
   const [displayName, setDisplayName] = useState('');
@@ -8,20 +10,54 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { setAccessToken } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const res = await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ displayName, email, password }),
-    });
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayName, email, password }),
+      });
 
-    const data = await res.json();
-    setMessage(data.message || data.error);
-    setLoading(false);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setMessage(data.message || 'Registration failed');
+        setLoading(false);
+        return;
+      }
+
+      setMessage(' Registration successful! Logging you in...');
+
+      const loginRes = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const loginData = await loginRes.json();
+
+      if (!loginRes.ok || !loginData.accessToken) {
+        setMessage('Registration succeeded, but login failed. Please log in manually.');
+        setLoading(false);
+        return;
+      }
+
+      setAccessToken(loginData.accessToken);
+
+      setMessage('Registration successful! Redirecting to chat...');
+      setTimeout(() => router.push('/chat'), 1500);
+    } catch (err) {
+      setMessage('Something went wrong. Please try again.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -74,7 +110,13 @@ export default function RegisterPage() {
         </button>
 
         {message && (
-          <p className={`text-center font-medium ${message.includes('error') ? 'text-red-500' : 'text-green-600'}`}>
+          <p
+            className={`text-center font-medium ${
+              message.includes('failed') || message.includes('wrong')
+                ? 'text-red-500'
+                : 'text-green-600'
+            }`}
+          >
             {message}
           </p>
         )}
