@@ -66,7 +66,7 @@ export default function ConversationPage() {
       const newMessage: Message = await res.json();
       setMessages(prev => [...prev, newMessage]);
       setInput('');
-      setShowEmojiPicker(false); // Optional: close after sending
+      setShowEmojiPicker(false);
     }
   };
 
