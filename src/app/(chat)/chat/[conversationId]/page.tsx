@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/app/(auth)/AuthContext';
+import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 
 interface Message {
   id: number;
@@ -23,6 +24,7 @@ export default function ConversationPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   useEffect(() => {
     if (!accessToken || !conversationId) return;
@@ -64,7 +66,12 @@ export default function ConversationPage() {
       const newMessage: Message = await res.json();
       setMessages(prev => [...prev, newMessage]);
       setInput('');
+      setShowEmojiPicker(false); // Optional: close after sending
     }
+  };
+
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setInput(prev => prev + emojiData.emoji);
   };
 
   if (loading) return <div className="p-4">Loading conversation...</div>;
@@ -95,7 +102,24 @@ export default function ConversationPage() {
 
       {/* Input area */}
       <div className="p-4 bg-white">
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 items-center justify-center relative">
+          {/* Emoji toggle button */}
+          <button
+            type="button"
+            onClick={() => setShowEmojiPicker(prev => !prev)}
+            className="flex items-center justify-center p-0"
+          >
+            <span className="text-2xl">😊</span>
+          </button>
+
+          {/* Emoji picker dropdown */}
+          {showEmojiPicker && (
+            <div className="absolute bottom-14 left-0 z-50">
+              <EmojiPicker onEmojiClick={handleEmojiClick} />
+            </div>
+          )}
+
+          {/* Text input */}
           <input
             type="text"
             value={input}
