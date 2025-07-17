@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/app/(auth)/AuthContext';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
@@ -52,6 +52,8 @@ export default function ConversationPage() {
   const [loading, setLoading] = useState(true);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!accessToken || !conversationId) return;
 
@@ -75,6 +77,12 @@ export default function ConversationPage() {
 
     fetchMessages();
   }, [accessToken, conversationId]);
+
+useLayoutEffect(() => {
+  if (messages.length === 0) return;
+
+  messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+}, [messages]);
 
   useSSE(conversationId, (newMessage) => {
     setMessages((prev) => [...prev, newMessage]);
@@ -106,7 +114,7 @@ export default function ConversationPage() {
   if (loading) return <div className="p-4">Loading conversation...</div>;
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col flex-1 overflow-hidden">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.map((msg) => (
@@ -127,10 +135,11 @@ export default function ConversationPage() {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* Input area */}
-      <div className="p-4 bg-white">
+      <div className="p-4 bg-white border-t">
         <div className="flex space-x-2 items-center justify-center relative">
           {/* Emoji toggle button */}
           <button
