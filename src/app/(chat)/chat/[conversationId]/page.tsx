@@ -16,6 +16,32 @@ interface Message {
   createdAt: string;
 }
 
+function useSSE(conversationId: string | undefined, onMessage: (msg: Message) => void) {
+  useEffect(() => {
+    if (!conversationId) return;
+
+    const eventSource = new EventSource(`/api/stream/${conversationId}`);
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data: Message = JSON.parse(event.data);
+        onMessage(data);
+      } catch (err) {
+        console.error('Invalid SSE message:', err);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.warn('SSE error:', err);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [conversationId]);
+}
+
 export default function ConversationPage() {
   const { accessToken, user } = useAuth();
   const { conversationId: rawId } = useParams() as { conversationId?: string };
@@ -50,6 +76,10 @@ export default function ConversationPage() {
     fetchMessages();
   }, [accessToken, conversationId]);
 
+  useSSE(conversationId, (newMessage) => {
+    setMessages((prev) => [...prev, newMessage]);
+  });
+
   const sendMessage = async () => {
     if (!input.trim() || !conversationId) return;
 
@@ -64,14 +94,13 @@ export default function ConversationPage() {
 
     if (res.ok) {
       const newMessage: Message = await res.json();
-      setMessages(prev => [...prev, newMessage]);
       setInput('');
       setShowEmojiPicker(false);
     }
   };
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
-    setInput(prev => prev + emojiData.emoji);
+    setInput((prev) => prev + emojiData.emoji);
   };
 
   if (loading) return <div className="p-4">Loading conversation...</div>;
@@ -80,7 +109,7 @@ export default function ConversationPage() {
     <div className="flex flex-col h-full">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <div
             key={msg.id}
             className={`max-w-md px-4 py-2 rounded-xl text-sm ${
@@ -106,7 +135,7 @@ export default function ConversationPage() {
           {/* Emoji toggle button */}
           <button
             type="button"
-            onClick={() => setShowEmojiPicker(prev => !prev)}
+            onClick={() => setShowEmojiPicker((prev) => !prev)}
             className="flex items-center justify-center p-0"
           >
             <span className="text-2xl">😊</span>
@@ -123,7 +152,7 @@ export default function ConversationPage() {
           <input
             type="text"
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             className="flex-1 px-4 py-2 border rounded-xl"
             placeholder="Type a message..."
           />
