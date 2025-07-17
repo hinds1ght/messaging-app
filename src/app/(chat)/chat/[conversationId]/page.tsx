@@ -64,6 +64,12 @@ export default function ConversationPage() {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
+        if (res.status === 403) {
+          console.warn("Access denied. You’re not a participant in this conversation.");
+          alert("You don’t have access to this conversation.");
+          return;
+        }
+        
         if (res.ok) {
           const data: Message[] = await res.json();
           setMessages(data);
