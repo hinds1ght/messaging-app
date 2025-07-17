@@ -6,7 +6,7 @@ export function useSSE(conversationId: string, onMessage: (msg: any) => void) {
 
     const eventSource = new EventSource(`/api/stream/${conversationId}`);
 
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = event => {
       try {
         const data = JSON.parse(event.data);
         onMessage(data);
@@ -15,7 +15,7 @@ export function useSSE(conversationId: string, onMessage: (msg: any) => void) {
       }
     };
 
-    eventSource.onerror = (err) => {
+    eventSource.onerror = err => {
       console.warn('SSE error:', err);
       eventSource.close();
     };

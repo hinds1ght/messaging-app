@@ -22,7 +22,7 @@ function useSSE(conversationId: string | undefined, onMessage: (msg: Message) =>
 
     const eventSource = new EventSource(`/api/stream/${conversationId}`);
 
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = event => {
       try {
         const data: Message = JSON.parse(event.data);
         onMessage(data);
@@ -31,7 +31,7 @@ function useSSE(conversationId: string | undefined, onMessage: (msg: Message) =>
       }
     };
 
-    eventSource.onerror = (err) => {
+    eventSource.onerror = err => {
       console.warn('SSE error:', err);
       eventSource.close();
     };
@@ -65,11 +65,11 @@ export default function ConversationPage() {
         });
 
         if (res.status === 403) {
-          console.warn("Access denied. You’re not a participant in this conversation.");
-          alert("You don’t have access to this conversation.");
+          console.warn('Access denied. You’re not a participant in this conversation.');
+          alert('You don’t have access to this conversation.');
           return;
         }
-        
+
         if (res.ok) {
           const data: Message[] = await res.json();
           setMessages(data);
@@ -84,14 +84,14 @@ export default function ConversationPage() {
     fetchMessages();
   }, [accessToken, conversationId]);
 
-useLayoutEffect(() => {
-  if (messages.length === 0) return;
+  useLayoutEffect(() => {
+    if (messages.length === 0) return;
 
-  messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-}, [messages]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
+  }, [messages]);
 
-  useSSE(conversationId, (newMessage) => {
-    setMessages((prev) => [...prev, newMessage]);
+  useSSE(conversationId, newMessage => {
+    setMessages(prev => [...prev, newMessage]);
   });
 
   const sendMessage = async () => {
@@ -114,7 +114,7 @@ useLayoutEffect(() => {
   };
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
-    setInput((prev) => prev + emojiData.emoji);
+    setInput(prev => prev + emojiData.emoji);
   };
 
   if (loading) return <div className="p-4">Loading conversation...</div>;
@@ -123,7 +123,7 @@ useLayoutEffect(() => {
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map((msg) => (
+        {messages.map(msg => (
           <div
             key={msg.id}
             className={`max-w-md px-4 py-2 rounded-xl text-sm ${
@@ -150,7 +150,7 @@ useLayoutEffect(() => {
           {/* Emoji toggle button */}
           <button
             type="button"
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            onClick={() => setShowEmojiPicker(prev => !prev)}
             className="flex items-center justify-center p-0"
           >
             <span className="text-2xl">😊</span>
@@ -167,7 +167,7 @@ useLayoutEffect(() => {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             className="flex-1 px-4 py-2 border rounded-xl"
             placeholder="Type a message..."
           />

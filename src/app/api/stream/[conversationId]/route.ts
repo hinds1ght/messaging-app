@@ -2,10 +2,7 @@ import { NextRequest } from 'next/server';
 
 const clients = new Map<string, Set<ReadableStreamDefaultController>>();
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { conversationId: string } }
-) {
+export async function GET(req: NextRequest, context: { params: { conversationId: string } }) {
   const { conversationId } = context.params;
 
   const stream = new ReadableStream({
