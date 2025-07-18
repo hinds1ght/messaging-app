@@ -1,4 +1,4 @@
-# 💬 ChimeUwu - Real-time Messaging App
+# ChimeUwu - Real-time Messaging App
 
 A full-stack, real-time messaging app built with **Next.js 14**, **PostgreSQL**, **Prisma**, and **Server-Sent Events (SSE)**. Authenticated users can search for others, start conversations, and exchange messages instantly.
 
@@ -66,4 +66,5 @@ A full-stack, real-time messaging app built with **Next.js 14**, **PostgreSQL**,
 ## Author
 
 GitHub: [@hinds1ght](https://github.com/hinds1ght)
+Email: gilyu619@gmail.com
 
