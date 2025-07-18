@@ -61,19 +61,23 @@ export default function ConversationPage() {
   const sendMessage = async () => {
     if (!input.trim() || !conversationId) return;
 
+    const messageToSend = input;
+    setInput('');
+    setShowEmojiPicker(false);
+
     const res = await fetch(`/api/messages/${conversationId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ content: input }),
+      body: JSON.stringify({ content: messageToSend }),
     });
 
     if (res.ok) {
       const newMessage: Message = await res.json();
-      setInput('');
-      setShowEmojiPicker(false);
+    } else {
+      setInput(messageToSend);
     }
   };
 
