@@ -15,7 +15,7 @@ export function useSSE(conversationId: string, onMessage: (msg: any) => void) {
   useEffect(() => {
     if (!conversationId) return;
 
-    const eventSource = new EventSource(`${process.env.SSE_URL}/stream/${conversationId}`);
+    const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_SSE_URL}/stream/${conversationId}`);
 
     eventSource.onmessage = event => {
       try {

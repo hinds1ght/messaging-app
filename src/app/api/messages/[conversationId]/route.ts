@@ -95,7 +95,7 @@ export async function POST(
       },
     });
 
-    await fetch(`${process.env.SSE_URL}/send/${conversationId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_SSE_URL}/send/${conversationId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(message),
