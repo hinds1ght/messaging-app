@@ -132,6 +132,12 @@ export default function ConversationPage() {
             type="text"
             value={input}
             onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
             className="flex-1 px-4 py-2 border rounded-xl"
             placeholder="Type a message..."
           />
