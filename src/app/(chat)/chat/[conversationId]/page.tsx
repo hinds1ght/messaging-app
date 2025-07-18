@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import { useAuth } from '@/app/(auth)/AuthContext';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import { useSSE, Message } from '@/hooks/useSSE';
+import LoadingDots from  '../LoadingDots';
 
 export default function ConversationPage() {
   const { accessToken, user } = useAuth();
@@ -14,6 +15,7 @@ export default function ConversationPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -64,6 +66,7 @@ export default function ConversationPage() {
     const messageToSend = input;
     setInput('');
     setShowEmojiPicker(false);
+    setSending(true);
 
     const res = await fetch(`/api/messages/${conversationId}`, {
       method: 'POST',
@@ -79,6 +82,8 @@ export default function ConversationPage() {
     } else {
       setInput(messageToSend);
     }
+
+    setSending(false);
   };
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
@@ -109,6 +114,15 @@ export default function ConversationPage() {
             </div>
           </div>
         ))}
+
+      {sending && (
+        <div className="max-w-md px-4 py-2 rounded-xl text-sm bg-blue-400 text-white self-end ml-auto">
+          <div className="font-semibold">You</div>
+            <LoadingDots />
+          <div className="text-xs text-right opacity-70">Sending...</div>
+        </div>
+      )}
+
         <div ref={messagesEndRef} />
       </div>
 
