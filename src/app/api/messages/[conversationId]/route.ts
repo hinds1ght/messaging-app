@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyAccessToken } from '@/lib/jwt';
-import { clients } from '@/app/api/stream/[conversationId]/route';
 
 export async function GET(
   req: NextRequest,
@@ -96,18 +95,16 @@ export async function POST(
       },
     });
 
+    await fetch(`http://localhost:4000/send/${conversationId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(message),
+    });
+
     await prisma.conversation.update({
       where: { id: conversationId },
       data: { updatedAt: new Date() },
     });
-
-    if (clients.has(String(conversationId))) {
-      const payload = `data: ${JSON.stringify(message)}\n\n`;
-
-      for (const controller of clients.get(String(conversationId))!) {
-        controller.enqueue(payload);
-      }
-    }
 
     return NextResponse.json(message);
   } catch (err) {

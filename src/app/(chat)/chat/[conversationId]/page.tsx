@@ -4,43 +4,7 @@ import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/app/(auth)/AuthContext';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
-
-interface Message {
-  id: number;
-  content: string;
-  senderId: number;
-  sender: {
-    id: number;
-    displayName: string;
-  };
-  createdAt: string;
-}
-
-function useSSE(conversationId: string | undefined, onMessage: (msg: Message) => void) {
-  useEffect(() => {
-    if (!conversationId) return;
-
-    const eventSource = new EventSource(`/api/stream/${conversationId}`);
-
-    eventSource.onmessage = event => {
-      try {
-        const data: Message = JSON.parse(event.data);
-        onMessage(data);
-      } catch (err) {
-        console.error('Invalid SSE message:', err);
-      }
-    };
-
-    eventSource.onerror = err => {
-      console.warn('SSE error:', err);
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, [conversationId]);
-}
+import { useSSE, Message } from '@/hooks/useSSE';
 
 export default function ConversationPage() {
   const { accessToken, user } = useAuth();

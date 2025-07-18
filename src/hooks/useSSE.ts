@@ -1,10 +1,21 @@
 import { useEffect } from 'react';
 
+export interface Message {
+  id: number;
+  content: string;
+  senderId: number;
+  sender: {
+    id: number;
+    displayName: string;
+  };
+  createdAt: string;
+}
+
 export function useSSE(conversationId: string, onMessage: (msg: any) => void) {
   useEffect(() => {
     if (!conversationId) return;
 
-    const eventSource = new EventSource(`/api/stream/${conversationId}`);
+    const eventSource = new EventSource(`http://localhost:4000/stream/${conversationId}`);
 
     eventSource.onmessage = event => {
       try {
