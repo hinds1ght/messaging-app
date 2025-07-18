@@ -40,7 +40,7 @@ export default function ChatLandingPage() {
 
   if (noConversations) {
     return (
-      <div className="flex h-full items-center justify-center text-center text-gray-600 p-4">
+      <div className="flex w-full items-center justify-center text-gray-600 p-4">
         You have no conversations yet. Start chatting by selecting a user from the sidebar!
       </div>
     );
