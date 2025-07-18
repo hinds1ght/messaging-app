@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💬 ChimeUwu - Real-time Messaging App
 
-## Getting Started
+A full-stack, real-time messaging app built with **Next.js 14**, **PostgreSQL**, **Prisma**, and **Server-Sent Events (SSE)**. Authenticated users can search for others, start conversations, and exchange messages instantly.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- JWT-based Authentication (Access & Refresh tokens)
+- User registration, login, and search
+- Real-time messaging using Server-Sent Events (SSE)
+- Persistent conversations and messages via PostgreSQL + Prisma
+- Emoji picker support
+- Responsive design (mobile in-development)
+- Live "sending…" indicators for messages in-flight
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- **Frontend & Backend**: [Next.js 14](https://nextjs.org/)
+- **Database**: PostgreSQL (local + Render for production)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Authentication**: Custom JWT + AuthContext
+- **Realtime Messaging**: Server-Sent Events (SSE)
+- **Styling**: Tailwind CSS
+- **Emoji Support**: [`emoji-picker-react`](https://github.com/ealush/emoji-picker-react)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Frontend: Vercel
+- Database: Render PostgreSQL
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Live Demo
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- view live demo [here](https://messaging-app-henna-kappa.vercel.app/)
+
+---
+
+## Demo Accounts
+
+- Email: alice@example.com / Password: alice123
+
+- Email: bob@example.com / Password: bob123
+
+---
+
+## Future Improvements
+
+- File uploads (images, PDFs, etc.)
+
+- Message reactions (👍, 😂, etc.)
+
+- Typing indicators via SSE
+
+- Push notifications
+
+- Admin dashboard
+
+---
+
+## Author
+
+GitHub: [@hinds1ght](https://github.com/hinds1ght)
+
