@@ -15,7 +15,7 @@ export function useSSE(conversationId: string, onMessage: (msg: any) => void) {
   useEffect(() => {
     if (!conversationId) return;
 
-    const eventSource = new EventSource(`http://localhost:4000/stream/${conversationId}`);
+    const eventSource = new EventSource(`https://github.com/hinds1ght/sse-backend/stream/${conversationId}`);
 
     eventSource.onmessage = event => {
       try {

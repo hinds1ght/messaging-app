@@ -95,7 +95,7 @@ export async function POST(
       },
     });
 
-    await fetch(`http://localhost:4000/send/${conversationId}`, {
+    await fetch(`https://github.com/hinds1ght/sse-backend/send/${conversationId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(message),
