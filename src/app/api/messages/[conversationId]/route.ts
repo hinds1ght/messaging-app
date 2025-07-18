@@ -95,7 +95,7 @@ export async function POST(
       },
     });
 
-    await fetch(`https://github.com/hinds1ght/sse-backend/send/${conversationId}`, {
+    await fetch(`https://sse-backend-uov5.onrender.com/send/${conversationId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(message),
