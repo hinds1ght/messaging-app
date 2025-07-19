@@ -63,7 +63,12 @@ export default function ConversationPage() {
     const diff = newScrollHeight - prevScrollHeightRef.current;
     container.scrollTop = diff;
     isPaginatingRef.current = false;
-  }
+  } else if (shouldScrollToBottomRef.current) {
+  requestAnimationFrame(() => {
+    container.scrollTop = container.scrollHeight;
+    shouldScrollToBottomRef.current = false;
+  });
+}
   }, [allMessages]);
 
   const sendMessage = async () => {
