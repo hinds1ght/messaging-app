@@ -96,24 +96,27 @@ export default function ConversationPage() {
     <div className="flex flex-col flex-1 overflow-hidden">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {messages.map(msg => (
-          <div
-            key={msg.id}
-            className={`max-w-md px-4 py-2 rounded-xl text-sm ${
-              msg.senderId === user?.userId
-                ? 'bg-blue-500 text-white self-end ml-auto'
-                : 'bg-gray-200 text-gray-800'
-            }`}
-          >
-            <div className="font-semibold">
-              {msg.senderId === user?.userId ? 'You' : msg.sender.displayName}
-            </div>
-            <div>{msg.content}</div>
-            <div className="text-xs text-right opacity-70">
-              {new Date(msg.createdAt).toLocaleTimeString()}
-            </div>
-          </div>
-        ))}
+        {messages.map(msg =>( <div
+    key={msg.id}
+    className={`flex ${msg.senderId === user?.userId ? 'justify-end' : 'justify-start'}`}
+  >
+    <div
+      className={`break-words px-4 py-2 rounded-xl text-sm max-w-[75%] ${
+        msg.senderId === user?.userId
+          ? 'bg-blue-500 text-white'
+          : 'bg-gray-200 text-gray-800'
+      }`}
+    >
+      <div className="font-semibold">
+        {msg.senderId === user?.userId ? 'You' : msg.sender.displayName}
+      </div>
+      <div>{msg.content}</div>
+      <div className="text-xs text-right opacity-70">
+        {new Date(msg.createdAt).toLocaleTimeString()}
+      </div>
+    </div>
+  </div>
+))}
 
       {sending && (
         <div className="max-w-md px-4 py-2 rounded-xl text-sm bg-blue-400 text-white self-end ml-auto">
