@@ -11,7 +11,7 @@ A full-stack, real-time messaging app built with **Next.js 14**, **PostgreSQL**,
 - Real-time messaging using Server-Sent Events (SSE)
 - Persistent conversations and messages via PostgreSQL + Prisma
 - Emoji picker support
-- Responsive design (mobile in-development)
+- Responsive design (**mobile in-development**)
 - Live "sending…" indicators for messages in-flight
 
 ---
