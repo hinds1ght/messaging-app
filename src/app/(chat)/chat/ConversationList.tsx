@@ -35,7 +35,7 @@ export default function ConversationList({ refreshFlag }: { refreshFlag: number 
           <Link href={`/chat/${convo.id}`} key={convo.id}>
             <div className="p-3 bg-white rounded-xl shadow hover:bg-gray-100">
               <div className="font-semibold">{convo.name || names}</div>
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-gray-500 truncate">
                 {convo.messages[0]?.content || 'No messages yet'}
               </div>
             </div>
