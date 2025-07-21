@@ -67,4 +67,3 @@ A full-stack, real-time messaging app built with **Next.js 14**, **PostgreSQL**,
 
 - GitHub: [@hinds1ght](https://github.com/hinds1ght)
 - Email: gilyu619@gmail.com
-

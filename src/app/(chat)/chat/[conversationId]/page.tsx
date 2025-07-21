@@ -13,13 +13,9 @@ export default function ConversationPage() {
   const { conversationId: rawId } = useParams() as { conversationId?: string };
   const conversationId = Array.isArray(rawId) ? rawId[0] : rawId;
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-  } = useChatMessages(Number(conversationId));
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useChatMessages(
+    Number(conversationId)
+  );
 
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
@@ -29,46 +25,47 @@ export default function ConversationPage() {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const shouldScrollToBottomRef = useRef(false);
   const isFirstLoadRef = useRef(true);
-  const isPaginatingRef = useRef(false);  
+  const isPaginatingRef = useRef(false);
   const prevScrollHeightRef = useRef(0);
 
-  const paginatedMessages = data?.pages.flatMap((page) => page.messages) || [];
+  const paginatedMessages = data?.pages.flatMap(page => page.messages) || [];
 
- const allMessages = [
-  ...paginatedMessages,
-  ...liveMessages.filter((m) => !paginatedMessages.some((p) => p.id === m.id)),
-].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  const allMessages = [
+    ...paginatedMessages,
+    ...liveMessages.filter(m => !paginatedMessages.some(p => p.id === m.id)),
+  ].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-  useSSE(conversationId, (newMessage) => {
-    setLiveMessages((prev) => {
-      if (prev.find((m) => m.id === newMessage.id)) return prev;
+  useSSE(user?.userId, newMessage => {
+    if (newMessage.conversationId !== Number(conversationId)) return;
+    setLiveMessages(prev => {
+      if (prev.find(m => m.id === newMessage.id)) return prev;
       shouldScrollToBottomRef.current = true;
       return [...prev, newMessage];
     });
   });
 
   useLayoutEffect(() => {
-     const container = messagesContainerRef.current;
-  if (!container || !allMessages.length) return;
+    const container = messagesContainerRef.current;
+    if (!container || !allMessages.length) return;
 
-  if (isFirstLoadRef.current) {
-    // Initial load or refresh scroll to bottom
-    requestAnimationFrame(() => {
-      container.scrollTop = container.scrollHeight;
-      isFirstLoadRef.current = false;
-    });
-  } else if (isPaginatingRef.current) {
-    // Maintain scroll position after loading older messages
-    const newScrollHeight = container.scrollHeight;
-    const diff = newScrollHeight - prevScrollHeightRef.current;
-    container.scrollTop = diff;
-    isPaginatingRef.current = false;
-  } else if (shouldScrollToBottomRef.current) {
-  requestAnimationFrame(() => {
-    container.scrollTop = container.scrollHeight;
-    shouldScrollToBottomRef.current = false;
-  });
-}
+    if (isFirstLoadRef.current) {
+      // Initial load or refresh scroll to bottom
+      requestAnimationFrame(() => {
+        container.scrollTop = container.scrollHeight;
+        isFirstLoadRef.current = false;
+      });
+    } else if (isPaginatingRef.current) {
+      // Maintain scroll position after loading older messages
+      const newScrollHeight = container.scrollHeight;
+      const diff = newScrollHeight - prevScrollHeightRef.current;
+      container.scrollTop = diff;
+      isPaginatingRef.current = false;
+    } else if (shouldScrollToBottomRef.current) {
+      requestAnimationFrame(() => {
+        container.scrollTop = container.scrollHeight;
+        shouldScrollToBottomRef.current = false;
+      });
+    }
   }, [allMessages]);
 
   const sendMessage = async () => {
@@ -89,28 +86,28 @@ export default function ConversationPage() {
     });
 
     if (!res.ok) {
-      setInput(messageToSend); 
+      setInput(messageToSend);
     } else {
-    shouldScrollToBottomRef.current = true; 
-  }
+      shouldScrollToBottomRef.current = true;
+    }
 
     setSending(false);
   };
 
   const handleEmojiClick = (emojiData: EmojiClickData) => {
-    setInput((prev) => prev + emojiData.emoji);
+    setInput(prev => prev + emojiData.emoji);
   };
 
   const handleScroll = () => {
- const container = messagesContainerRef.current;
-  if (!container || !hasNextPage || isFetchingNextPage) return;
+    const container = messagesContainerRef.current;
+    if (!container || !hasNextPage || isFetchingNextPage) return;
 
-  if (container.scrollTop < 100) {
-    isPaginatingRef.current = true;
-    prevScrollHeightRef.current = container.scrollHeight;
-    fetchNextPage();
-  }
-};
+    if (container.scrollTop < 100) {
+      isPaginatingRef.current = true;
+      prevScrollHeightRef.current = container.scrollHeight;
+      fetchNextPage();
+    }
+  };
 
   if (isLoading) return <div className="p-4">Loading conversation...</div>;
 
@@ -126,7 +123,7 @@ export default function ConversationPage() {
           <div className="text-center text-sm text-gray-500">Loading more...</div>
         )}
 
-        {allMessages.map((msg) => (
+        {allMessages.map(msg => (
           <div
             key={msg.id}
             className={`flex ${msg.senderId === user?.userId ? 'justify-end' : 'justify-start'}`}
@@ -166,7 +163,7 @@ export default function ConversationPage() {
           {/* Emoji toggle button */}
           <button
             type="button"
-            onClick={() => setShowEmojiPicker((prev) => !prev)}
+            onClick={() => setShowEmojiPicker(prev => !prev)}
             className="flex items-center justify-center p-0"
           >
             <span className="text-2xl">😊</span>
@@ -183,8 +180,8 @@ export default function ConversationPage() {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();

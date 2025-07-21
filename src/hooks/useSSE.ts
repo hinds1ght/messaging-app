@@ -4,6 +4,7 @@ export interface Message {
   id: number;
   content: string;
   senderId: number;
+  conversationId: number;
   sender: {
     id: number;
     displayName: string;
@@ -11,28 +12,24 @@ export interface Message {
   createdAt: string;
 }
 
-export function useSSE(conversationId: string, onMessage: (msg: any) => void) {
+export function useSSE(userId: number | undefined, onMessage: (msg: Message) => void) {
   useEffect(() => {
-    if (!conversationId) return;
+    if (!userId) return;
 
-    const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_SSE_URL}/stream/${conversationId}`);
+    const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_SSE_URL}/stream/${userId}`);
 
     eventSource.onmessage = event => {
-      try {
-        const data = JSON.parse(event.data);
-        onMessage(data);
-      } catch (err) {
-        console.error('Invalid SSE message:', err);
-      }
+      const data = JSON.parse(event.data);
+      onMessage(data);
     };
 
-    eventSource.onerror = err => {
-      console.warn('SSE error:', err);
+    eventSource.onerror = () => {
+      console.error('SSE connection error');
       eventSource.close();
     };
 
     return () => {
       eventSource.close();
     };
-  }, [conversationId]);
+  }, [userId]);
 }

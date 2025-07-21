@@ -22,8 +22,8 @@ export const useChatMessages = (conversationId: number) => {
 
       return res.json();
     },
-    initialPageParam: null, 
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
+    initialPageParam: null,
+    getNextPageParam: lastPage => lastPage.nextCursor,
     enabled: !!accessToken && !!conversationId,
   });
 };

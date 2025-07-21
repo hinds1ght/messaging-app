@@ -20,7 +20,7 @@ export async function GET(
       return NextResponse.json({ message: 'Invalid conversation ID' }, { status: 400 });
     }
 
-    // Make sure user is part of conversation
+    // check if user is part of conversation
     const isParticipant = await prisma.participant.findFirst({
       where: { conversationId, userId },
     });
@@ -47,7 +47,7 @@ export async function GET(
         }),
       },
       orderBy: { createdAt: 'desc' },
-      take: PAGE_SIZE + 1, 
+      take: PAGE_SIZE + 1,
       include: {
         sender: {
           select: {
@@ -62,7 +62,7 @@ export async function GET(
     const paginated = hasMore ? messages.slice(0, -1) : messages;
 
     return NextResponse.json({
-      messages: paginated.reverse(), 
+      messages: paginated.reverse(),
       nextCursor: hasMore ? paginated[0].id : null,
     });
   } catch (err) {
@@ -117,14 +117,22 @@ export async function POST(
       },
     });
 
-    // Notify SSE server
-    await fetch(`${process.env.NEXT_PUBLIC_SSE_URL}/send/${conversationId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(message),
+    const participants = await prisma.participant.findMany({
+      where: { conversationId },
+      select: { userId: true },
     });
 
-    // Update conversation updatedAt
+    await Promise.all(
+      participants.map(p =>
+        fetch(`${process.env.NEXT_PUBLIC_SSE_URL}/send/${p.userId}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(message),
+        })
+      )
+    );
+
+    // update conversation updatedAt
     await prisma.conversation.update({
       where: { id: conversationId },
       data: { updatedAt: new Date() },
