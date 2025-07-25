@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/app/(auth)/AuthContext';
 import Link from 'next/link';
-import { useSSE, Message } from '@/hooks/useSSE'; // already used in chatbox
+import { useSSE, Message } from '@/hooks/useSSE';
 
 type Conversation = {
   id: number;
@@ -18,7 +18,6 @@ export default function ConversationList() {
   const { accessToken, user } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
 
-  // Optional: For re-triggering fetch
   const fetchConvos = async () => {
     const res = await fetch('/api/conversations', {
       headers: {
@@ -34,9 +33,7 @@ export default function ConversationList() {
     if (accessToken) fetchConvos();
   }, [accessToken]);
 
-  // Subscribe to new messages via SSE
   useSSE(user?.userId, newMessage => {
-    // If the conversation exists, move it to the top and update preview
     setConversations(prev => {
       const index = prev.findIndex(c => c.id === newMessage.conversationId);
       if (index !== -1) {
@@ -49,7 +46,6 @@ export default function ConversationList() {
         return updated;
       }
 
-      // If it's a new conversation, re-fetch everything
       fetchConvos();
       return prev;
     });
@@ -65,13 +61,18 @@ export default function ConversationList() {
 
         return (
           <Link href={`/chat/${convo.id}`} key={convo.id}>
-            <div className="p-3 bg-white rounded-xl shadow hover:bg-gray-100">
-              <div className="font-semibold">{convo.name || names}</div>
-              <div className="text-xs text-gray-500 truncate">
-                {convo.messages[0]?.content || 'No messages yet'}
-              </div>
-            </div>
-          </Link>
+  <div className="p-3 bg-white rounded-xl shadow hover:bg-gray-100 flex items-center gap-3">
+    <div className="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold text-lg">
+      {(convo.name || names)[0]?.toUpperCase()}
+    </div>
+    <div className="flex-1">
+      <div className="font-semibold">{convo.name || names}</div>
+      <div className="text-xs text-gray-500 truncate">
+        {convo.messages[0]?.content || 'No messages yet'}
+      </div>
+    </div>
+  </div>
+</Link>
         );
       })}
     </div>
