@@ -66,11 +66,11 @@ export default function ConversationList() {
                 {(convo.name || names)[0]?.toUpperCase()}
               </div>
               <div className="flex-1 overflow-hidden">
-  <div className="font-semibold truncate">{convo.name || names}</div>
-  <div className="text-xs text-gray-500 truncate whitespace-nowrap overflow-hidden">
-    {convo.messages[0]?.content || 'No messages yet'}
-  </div>
-</div>
+                <div className="font-semibold truncate">{convo.name || names}</div>
+                <div className="text-xs text-gray-500 truncate whitespace-nowrap overflow-hidden">
+                  {convo.messages[0]?.content || 'No messages yet'}
+                </div>
+              </div>
             </div>
           </Link>
         );
